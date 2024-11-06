@@ -9,7 +9,7 @@ import { createThread, getThreadState, sendMessage } from "@/lib/chatApi";
 
 const MarkdownText = makeMarkdownText();
 
-export function MyAssistant() {
+export function MyAssistant({ assistantId }: { assistantId: string }) {
   const threadIdRef = useRef<string | undefined>();
   const runtime = useLangGraphRuntime({
     threadId: threadIdRef.current,
@@ -22,6 +22,7 @@ export function MyAssistant() {
       return sendMessage({
         threadId,
         messages,
+        assistantId,
       });
     },
     onSwitchToNewThread: async () => {
