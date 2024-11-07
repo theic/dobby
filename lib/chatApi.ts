@@ -1,10 +1,8 @@
-import { Client, ThreadState, Assistant, Config, Metadata } from "@langchain/langgraph-sdk";
 import { LangChainMessage } from "@assistant-ui/react-langgraph";
+import { Assistant, Client, Config, Metadata, ThreadState } from "@langchain/langgraph-sdk";
 
 const createClient = () => {
-  const apiUrl =
-    process.env["NEXT_PUBLIC_LANGGRAPH_API_URL"] ||
-    new URL("/api", window.location.href).href;
+  const apiUrl = new URL("/api", window.location.href).href;
   return new Client({
     apiUrl,
   });
