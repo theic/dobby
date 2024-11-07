@@ -1,10 +1,16 @@
-import { LangChainMessage } from "@assistant-ui/react-langgraph";
-import { Assistant, Client, Config, Metadata, ThreadState } from "@langchain/langgraph-sdk";
+import { LangChainMessage } from '@assistant-ui/react-langgraph';
+import {
+  Assistant,
+  Client,
+  Config,
+  Metadata,
+  ThreadState
+} from '@langchain/langgraph-sdk';
 
 const createClient = () => {
-  const apiUrl = new URL("/api", window.location.href).href;
+  const apiUrl = new URL('/api', window.location.href).href;
   return new Client({
-    apiUrl,
+    apiUrl
   });
 };
 
@@ -24,18 +30,16 @@ export const sendMessage = async (params: {
   threadId: string;
   messages: LangChainMessage[];
   assistantId: string;
+  config?: Config;
 }) => {
   const client = createClient();
-  return client.runs.stream(
-    params.threadId,
-    params.assistantId,
-    {
-      input: {
-        messages: params.messages,
-      },
-      streamMode: "messages",
-    }
-  );
+  return client.runs.stream(params.threadId, params.assistantId, {
+    input: {
+      messages: params.messages
+    },
+    streamMode: 'messages',
+    config: params.config
+  });
 };
 
 export const createAssistant = async (params: {
@@ -51,7 +55,7 @@ export const createAssistant = async (params: {
     name: params.name,
     config: params.config,
     metadata: params.metadata,
-    assistantId: params.assistantId,
+    assistantId: params.assistantId
   });
 };
 
@@ -76,4 +80,13 @@ export const updateAssistant = async (
 export const deleteAssistant = async (assistantId: string) => {
   const client = createClient();
   return client.assistants.delete(assistantId);
+};
+
+export const getAssistants = async (userId: string): Promise<Assistant[]> => {
+  const client = createClient();
+  return client.assistants.search({
+    metadata: {
+      userId
+    }
+  });
 };

@@ -1,15 +1,24 @@
-"use client";
+'use client';
 
-import { useRef } from "react";
-import { Thread } from "@assistant-ui/react";
-import { useLangGraphRuntime } from "@assistant-ui/react-langgraph";
-import { makeMarkdownText } from "@assistant-ui/react-markdown";
+import { Thread } from '@assistant-ui/react';
+import { useLangGraphRuntime } from '@assistant-ui/react-langgraph';
+import { makeMarkdownText } from '@assistant-ui/react-markdown';
+import { useRef } from 'react';
 
-import { createThread, getThreadState, sendMessage } from "@/lib/chatApi";
+import { createThread, getThreadState, sendMessage } from '@/lib/chatApi';
+import { getUserId } from '@/lib/localStorage';
 
 const MarkdownText = makeMarkdownText();
 
-export function MyAssistant({ assistantId }: { assistantId: string }) {
+export function MyAssistant({
+  assistantId,
+  templateAssistantId,
+  allowImageAttachments = false
+}: {
+  assistantId: string;
+  templateAssistantId: string;
+  allowImageAttachments?: boolean;
+}) {
   const threadIdRef = useRef<string | undefined>();
   const runtime = useLangGraphRuntime({
     threadId: threadIdRef.current,
@@ -19,10 +28,21 @@ export function MyAssistant({ assistantId }: { assistantId: string }) {
         threadIdRef.current = thread_id;
       }
       const threadId = threadIdRef.current;
+
+      const userId = getUserId();
+
+      const config = {
+        configurable: {
+          assistantId: templateAssistantId,
+          userId
+        }
+      };
+
       return sendMessage({
         threadId,
         messages,
         assistantId,
+        config
       });
     },
     onSwitchToNewThread: async () => {
@@ -34,6 +54,7 @@ export function MyAssistant({ assistantId }: { assistantId: string }) {
       threadIdRef.current = threadId;
       return { messages: state.values.messages };
     },
+    unstable_allowImageAttachments: allowImageAttachments
   });
 
   return (
