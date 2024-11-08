@@ -1,17 +1,18 @@
-import { MyAssistant } from '@/components/MyAssistant';
+import { Assistant } from '@/components/MyAssistant';
 
-export default async function BuildAssistant({
-  params
-}: {
-  params: { assistantId: string };
-}) {
+type Props = {
+  params: Promise<{ assistantId: string }>;
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+};
+
+export default async function AssistantPage({ params }: Props) {
   const { assistantId } = await params;
 
   return (
     <main className="h-dvh">
       <div className="flex h-full">
         <div className="flex-1">
-          <MyAssistant
+          <Assistant
             assistantId={assistantId}
             templateAssistantId={assistantId}
             allowImageAttachments={true}

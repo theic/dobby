@@ -68,7 +68,7 @@ export default function Home() {
               href={`/assistant/${assistant.assistant_id}`}
               className="block p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
             >
-              Assistant {assistant.assistant_id.slice(0, 8)}...
+              Assistant {assistant.assistant_id}
             </Link>
           ))}
         </div>

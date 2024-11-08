@@ -10,14 +10,18 @@ import { getUserId } from '@/lib/localStorage';
 
 const MarkdownText = makeMarkdownText();
 
-export function MyAssistant({
+export function Assistant({
   assistantId,
   templateAssistantId,
-  allowImageAttachments = false
+  allowImageAttachments = false,
+  welcomePrompts = [],
+  previewMessage = ''
 }: {
   assistantId: string;
   templateAssistantId: string;
   allowImageAttachments?: boolean;
+  welcomePrompts?: string[];
+  previewMessage?: string;
 }) {
   const threadIdRef = useRef<string | undefined>();
   const runtime = useLangGraphRuntime({
@@ -61,6 +65,20 @@ export function MyAssistant({
     <Thread
       runtime={runtime}
       assistantMessage={{ components: { Text: MarkdownText } }}
+      welcome={{
+        message: previewMessage,
+        suggestions: welcomePrompts.map((prompt) => ({
+          prompt
+        }))
+      }}
+      // components={{
+      //   ThreadWelcome: () =>
+      //     welcomePosition === 'left' ? (
+      //       <LeftThreadWelcome />
+      //     ) : (
+      //       <RightThreadWelcome />
+      //     )
+      // }}
     />
   );
 }
