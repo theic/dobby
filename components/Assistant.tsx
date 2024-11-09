@@ -7,6 +7,7 @@ import { useRef } from 'react';
 
 import { createThread, getThreadState, sendMessage } from '@/lib/chatApi';
 import { getUserId } from '@/lib/localStorage';
+import { ToolFallback } from './tools/ToolFallback';
 
 const MarkdownText = makeMarkdownText();
 
@@ -64,13 +65,14 @@ export function Assistant({
   return (
     <Thread
       runtime={runtime}
-      assistantMessage={{ components: { Text: MarkdownText } }}
+      assistantMessage={{ components: { Text: MarkdownText, ToolFallback } }}
       welcome={{
         message: previewMessage,
         suggestions: welcomePrompts.map((prompt) => ({
           prompt
         }))
       }}
+      // tools={[UpsertSystemTool]}
       // components={{
       //   ThreadWelcome: () =>
       //     welcomePosition === 'left' ? (

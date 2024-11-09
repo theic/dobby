@@ -1,4 +1,5 @@
-import { Assistant } from '@/components/MyAssistant';
+import { Assistant } from '@/components/Assistant';
+import { TopBar } from '@/components/TopBar';
 
 type Props = {
   params: Promise<{ assistantId: string }>;
@@ -9,8 +10,13 @@ export default async function AssistantPage({ params }: Props) {
   const { assistantId } = await params;
 
   return (
-    <main className="h-dvh">
-      <div className="flex h-full">
+    <main className="h-dvh flex flex-col">
+      <TopBar
+        backUrl="/"
+        showEdit
+        editUrl={`/assistant/${assistantId}/build`}
+      />
+      <div className="flex flex-1">
         <div className="flex-1">
           <Assistant
             assistantId={assistantId}

@@ -55,7 +55,7 @@ export default function Home() {
         <div className="flex justify-end mb-8">
           <button
             onClick={handleCreateAssistant}
-            className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+            className="px-6 py-3 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors"
           >
             Create new assistant
           </button>
