@@ -1,6 +1,7 @@
 'use client';
 
-import { getUserId } from '@/lib/localStorage';
+import { auth } from '@/lib/firebase';
+import { signInAnonymously } from 'firebase/auth';
 import { useEffect } from 'react';
 
 export default function UserIdProvider({
@@ -9,8 +10,18 @@ export default function UserIdProvider({
   children: React.ReactNode;
 }) {
   useEffect(() => {
-    // Initialize userId on app start
-    getUserId();
+    const initializeAuth = async () => {
+      try {
+        // Sign in anonymously if no user is present
+        if (!auth.currentUser) {
+          await signInAnonymously(auth);
+        }
+      } catch (error) {
+        console.error('Failed to initialize auth:', error);
+      }
+    };
+
+    initializeAuth();
   }, []);
 
   return <>{children}</>;

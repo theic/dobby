@@ -1,3 +1,5 @@
+import { auth } from './firebase';
+
 export interface Assistant {
   assistantId: string;
   name: string;
@@ -20,14 +22,10 @@ const STORAGE_KEYS = {
 } as const;
 
 export function getUserId(): string {
-  let userId = localStorage.getItem(STORAGE_KEYS.USER_ID);
-
-  if (!userId) {
-    userId = crypto.randomUUID();
-    localStorage.setItem(STORAGE_KEYS.USER_ID, userId);
+  if (!auth.currentUser) {
+    throw new Error('No authenticated user found');
   }
-
-  return userId;
+  return auth.currentUser.uid;
 }
 
 export function saveAssistant(assistant: Assistant): void {

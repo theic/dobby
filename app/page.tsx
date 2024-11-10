@@ -1,6 +1,7 @@
 'use client';
 
 import { createAssistant, getAssistants } from '@/lib/chatApi';
+import { auth } from '@/lib/firebase';
 import { getUserId } from '@/lib/localStorage';
 import { Assistant } from '@langchain/langgraph-sdk';
 import Link from 'next/link';
@@ -10,19 +11,22 @@ import { useEffect, useState } from 'react';
 export default function Home() {
   const router = useRouter();
   const [assistants, setAssistants] = useState<Assistant[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const fetchAssistants = async () => {
-      try {
-        const userId = getUserId();
-        const fetchedAssistants = await getAssistants(userId);
-        setAssistants(fetchedAssistants);
-      } catch (error) {
-        console.error('Failed to fetch assistants:', error);
+    const unsubscribe = auth.onAuthStateChanged(async (user) => {
+      if (user) {
+        try {
+          const fetchedAssistants = await getAssistants(user.uid);
+          setAssistants(fetchedAssistants);
+        } catch (error) {
+          console.error('Failed to fetch assistants:', error);
+        }
       }
-    };
+      setIsLoading(false);
+    });
 
-    fetchAssistants();
+    return () => unsubscribe();
   }, []);
 
   const handleCreateAssistant = async () => {
@@ -48,6 +52,16 @@ export default function Home() {
       console.error('Failed to create assistant:', error);
     }
   };
+
+  if (isLoading) {
+    return (
+      <main className="min-h-dvh p-8">
+        <div className="max-w-2xl mx-auto">
+          <p>Loading...</p>
+        </div>
+      </main>
+    );
+  }
 
   return (
     <main className="min-h-dvh p-8">
