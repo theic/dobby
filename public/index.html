@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Bot Builder</title>
+    <title>Bot Builder - Create Your Custom AI Assistant</title>
 
     <style media="screen">
       body { 
@@ -11,11 +11,46 @@
         font-family: Roboto, Helvetica, Arial, sans-serif;
         margin: 0;
         padding: 0;
+        min-height: 100vh;
+      }
+
+      .hero-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 40px 20px;
+        text-align: center;
+      }
+
+      .title {
+        font-size: 48px;
+        color: #1a237e;
+        margin-bottom: 24px;
+        font-weight: 700;
+      }
+
+      .subtitle {
+        font-size: 24px;
+        color: #455a64;
+        margin-bottom: 40px;
+        line-height: 1.5;
+      }
+
+      .hero-image {
+        max-width: 800px;
+        width: 100%;
+        margin: 40px auto;
+        border-radius: 12px;
+        box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+      }
+
+      .button-group {
+        margin: 40px 0;
         display: flex;
         justify-content: center;
         align-items: center;
-        min-height: 100vh;
+        gap: 20px;
       }
+
       .main-button {
         background: #039be5;
         color: white;
@@ -26,16 +61,51 @@
         text-transform: uppercase;
         box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         transition: transform 0.2s, box-shadow 0.2s;
+        display: inline-block;
+        margin: 0;
       }
-      .main-button:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 6px 8px rgba(0,0,0,0.15);
+
+      .secondary-link {
+        color: #455a64;
+        text-decoration: none;
+        font-size: 18px;
+        transition: color 0.2s;
+        padding: 12px 24px;
+      }
+
+      .secondary-link:hover {
+        color: #1a237e;
+        text-decoration: underline;
+      }
+
+      @media (max-width: 768px) {
+        .title {
+          font-size: 36px;
+        }
+        .subtitle {
+          font-size: 20px;
+        }
+        .button-group {
+          flex-direction: column;
+        }
       }
     </style>
   </head>
   <body>
-    <a href="https://assistant-builder-964180115441.europe-west1.run.app" class="main-button">
-      Launch Bot Builder
-    </a>
+    <div class="hero-container">
+      <h1 class="title">Build Your Custom AI Assistant</h1>
+      <p class="subtitle">Create, customize, and deploy your own AI assistant in minutes.<br>No coding required.</p>
+      
+      <div class="button-group">
+        <a href="https://assistant-builder-964180115441.europe-west1.run.app" class="main-button">
+          Launch Bot Builder
+        </a>
+        <a href="#faq" class="secondary-link">
+          Learn More →
+        </a>
+      </div>
+      
+      <img src="explainer.gif" alt="Bot Builder Demo" class="hero-image">
+    </div>
   </body>
 </html>
