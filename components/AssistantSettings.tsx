@@ -1,3 +1,6 @@
+'use client';
+
+import { useState } from 'react';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
 import { Textarea } from './ui/textarea';
@@ -7,15 +10,29 @@ type Props = {
 };
 
 export function AssistantSettings({ assistantId }: Props) {
-  const handleSubmit = async () => {
-    console.log('Submitting for assistant:', assistantId);
+  const [name, setName] = useState('');
+  const [instructions, setInstructions] = useState('');
+
+  const handleSubmit = async (
+    field: 'name' | 'instructions',
+    value: string
+  ) => {
+    console.log(`Submitting ${field} for assistant:`, assistantId, value);
+    // TODO: Add API call to update assistant settings
   };
 
   return (
     <div className="p-4 space-y-6">
       <div className="space-y-2">
         <label className="text-sm font-medium">Assistant Name</label>
-        <Input placeholder="Enter assistant name..." />
+        <Input
+          placeholder="Enter assistant name..."
+          value={name}
+          onChange={(e) => {
+            setName(e.target.value);
+            handleSubmit('name', e.target.value);
+          }}
+        />
       </div>
 
       <div className="space-y-2">
@@ -23,6 +40,11 @@ export function AssistantSettings({ assistantId }: Props) {
         <Textarea
           placeholder="Enter instructions for your assistant..."
           className="min-h-[150px]"
+          value={instructions}
+          onChange={(e) => {
+            setInstructions(e.target.value);
+            handleSubmit('instructions', e.target.value);
+          }}
         />
       </div>
 

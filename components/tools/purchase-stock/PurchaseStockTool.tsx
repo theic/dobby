@@ -1,9 +1,8 @@
-"use client";
+'use client';
 
-import { TransactionConfirmationPending } from "./transaction-confirmation-pending";
-import { TransactionConfirmationFinal } from "./transaction-confirmation-final";
-import { makeAssistantToolUI, useThreadContext } from "@assistant-ui/react";
-import { updateState } from "@/lib/chatApi";
+import { makeAssistantToolUI } from '@assistant-ui/react';
+import { TransactionConfirmationFinal } from './transaction-confirmation-final';
+import { TransactionConfirmationPending } from './transaction-confirmation-pending';
 
 type PurchaseStockArgs = {
   ticker: string;
@@ -20,17 +19,17 @@ type PurchaseStockResult = {
 
 export const PurchaseStockTool = makeAssistantToolUI<PurchaseStockArgs, string>(
   {
-    toolName: "purchase_stock",
+    toolName: 'purchase_stock',
     render: function PurchaseStockUI({
       part: { args, result },
       status,
-      addResult,
+      addResult
     }) {
       let resultObj: PurchaseStockResult;
       try {
         resultObj = result ? JSON.parse(result) : {};
       } catch (e) {
-        resultObj = { error: result! };
+        resultObj = { error: result || (e as Error).message };
       }
 
       const handleReject = () => {
@@ -48,7 +47,7 @@ export const PurchaseStockTool = makeAssistantToolUI<PurchaseStockArgs, string>(
               purchase_stock({JSON.stringify(args)})
             </pre>
           </div>
-          {!result && status.type !== "running" && (
+          {!result && status.type !== 'running' && (
             <TransactionConfirmationPending
               {...args}
               onConfirm={handleConfirm}
@@ -64,6 +63,6 @@ export const PurchaseStockTool = makeAssistantToolUI<PurchaseStockArgs, string>(
           )}
         </div>
       );
-    },
+    }
   }
 );

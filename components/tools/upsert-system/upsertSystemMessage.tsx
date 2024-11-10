@@ -20,7 +20,10 @@ export const UpsertSystemTool = makeAssistantToolUI<UpsertSystemArgs, string>({
     try {
       resultObj = result ? JSON.parse(result) : { success: false, message: '' };
     } catch (e) {
-      resultObj = { success: false, message: result || 'Error parsing result' };
+      resultObj = {
+        success: false,
+        message: result || (e as Error).message
+      };
     }
 
     return (
