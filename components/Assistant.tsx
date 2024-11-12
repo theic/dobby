@@ -1,12 +1,12 @@
 'use client';
 
-import { Thread } from '@assistant-ui/react';
 import { useLangGraphRuntime } from '@assistant-ui/react-langgraph';
 import { makeMarkdownText } from '@assistant-ui/react-markdown';
 import { useRef } from 'react';
 
 import { createThread, getThreadState, sendMessage } from '@/lib/chatApi';
 import { getUserId } from '@/lib/localStorage';
+import { Thread } from '@assistant-ui/react';
 import { ToolFallback } from './tools/ToolFallback';
 
 const MarkdownText = makeMarkdownText();
@@ -63,6 +63,9 @@ export function Assistant({
   });
 
   return (
+    // <AssistantRuntimeProvider runtime={runtime}>
+    //   <MyAssistantSidebar />
+    // </AssistantRuntimeProvider>
     <Thread
       runtime={runtime}
       assistantMessage={{ components: { Text: MarkdownText, ToolFallback } }}
