@@ -2,7 +2,7 @@
 
 import { useLangGraphRuntime } from '@assistant-ui/react-langgraph';
 import { makeMarkdownText } from '@assistant-ui/react-markdown';
-import { useRef } from 'react';
+import { useEffect, useRef } from 'react';
 
 import { createThread, getThreadState, sendMessage } from '@/lib/chatApi';
 import { getUserId } from '@/lib/localStorage';
@@ -11,43 +11,35 @@ import { ToolFallback } from './tools/ToolFallback';
 
 const MarkdownText = makeMarkdownText();
 
-export function Assistant({
+export function AssistantTemplate({
   assistantId,
-  templateAssistantId,
-  allowImageAttachments = false,
+  threadId,
   welcomePrompts = [],
-  previewMessage = ''
+  previewMessage = '',
 }: {
   assistantId: string;
-  templateAssistantId: string;
-  allowImageAttachments?: boolean;
+  threadId: string;
   welcomePrompts?: string[];
   previewMessage?: string;
 }) {
-  const threadIdRef = useRef<string | undefined>();
+  const threadIdRef = useRef<string | undefined>(threadId);
   const runtime = useLangGraphRuntime({
     threadId: threadIdRef.current,
     stream: async (messages) => {
       if (!threadIdRef.current) {
-        const { thread_id } = await createThread();
-        threadIdRef.current = thread_id;
+        threadIdRef.current = threadId;
       }
-      const threadId = threadIdRef.current;
-
-      const userId = getUserId();
-
-      const config = {
-        configurable: {
-          assistantId: templateAssistantId,
-          userId
-        }
-      };
 
       return sendMessage({
         threadId,
         messages,
         assistantId,
-        config
+        config: {
+          configurable: {
+            assistantId,
+            userId: getUserId(),
+          },
+        },
       });
     },
     onSwitchToNewThread: async () => {
@@ -57,33 +49,26 @@ export function Assistant({
     onSwitchToThread: async (threadId) => {
       const state = await getThreadState(threadId);
       threadIdRef.current = threadId;
-      return { messages: state.values.messages };
+      return { messages: state.values.messages || [] };
     },
-    unstable_allowImageAttachments: allowImageAttachments
   });
 
+  useEffect(() => {
+    if (threadId) {
+      runtime.switchToThread(threadId);
+    }
+  }, [threadId, runtime]);
+
   return (
-    // <AssistantRuntimeProvider runtime={runtime}>
-    //   <MyAssistantSidebar />
-    // </AssistantRuntimeProvider>
     <Thread
       runtime={runtime}
       assistantMessage={{ components: { Text: MarkdownText, ToolFallback } }}
       welcome={{
         message: previewMessage,
         suggestions: welcomePrompts.map((prompt) => ({
-          prompt
-        }))
+          prompt,
+        })),
       }}
-      // tools={[UpsertSystemTool]}
-      // components={{
-      //   ThreadWelcome: () =>
-      //     welcomePosition === 'left' ? (
-      //       <LeftThreadWelcome />
-      //     ) : (
-      //       <RightThreadWelcome />
-      //     )
-      // }}
     />
   );
 }

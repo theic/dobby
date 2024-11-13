@@ -13,12 +13,10 @@ export function AssistantSettings({ assistantId }: Props) {
   const [name, setName] = useState('');
   const [instructions, setInstructions] = useState('');
 
-  const handleSubmit = async (
-    field: 'name' | 'instructions',
-    value: string
-  ) => {
-    console.log(`Submitting ${field} for assistant:`, assistantId, value);
-    // TODO: Add API call to update assistant settings
+  const handleSubmit = async (field: 'name' | 'instructions', value: string) => {
+    console.log(`Submitting ${field} for thread:`, value);
+    console.log(`Assistant ID:`, assistantId);
+    // TODO: Add API call to update thread settings
   };
 
   return (

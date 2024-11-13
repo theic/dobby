@@ -1,11 +1,6 @@
 import { LangChainMessage } from '@assistant-ui/react-langgraph';
-import {
-  Assistant,
-  Client,
-  Config,
-  Metadata,
-  ThreadState
-} from '@langchain/langgraph-sdk';
+import { Assistant, Client, Config, Metadata, Thread, ThreadState } from '@langchain/langgraph-sdk';
+import { getUserId } from './firebase-store';
 
 const createClient = () => {
   const apiUrl = new URL('/api', window.location.href).href;
@@ -14,9 +9,16 @@ const createClient = () => {
   });
 };
 
-export const createThread = async () => {
+export const createThread = async (assistantId?: string): Promise<{ thread_id: string }> => {
   const client = createClient();
-  return client.threads.create();
+  const userId = getUserId();
+  const thread = await client.threads.create({
+    metadata: {
+      user_id: userId,
+      assistant_id: assistantId
+    }
+  });
+  return { thread_id: thread.thread_id };
 };
 
 export const getThreadState = async (
@@ -89,4 +91,19 @@ export const getAssistants = async (userId: string): Promise<Assistant[]> => {
       userId
     }
   });
+};
+
+export const getThreads = async (userId: string): Promise<Thread[]> => {
+  const client = createClient();
+  return client.threads.search({
+    metadata: {
+      user_id: userId
+    }
+  });
+};
+
+export const getThreadMetadata = async (threadId: string): Promise<Metadata> => {
+  const client = createClient();
+  const thread = await client.threads.get(threadId);
+  return thread.metadata;
 };

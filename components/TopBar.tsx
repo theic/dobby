@@ -9,12 +9,7 @@ type TopBarProps = {
   editUrl?: string;
 };
 
-export function TopBar({
-  showPublish = false,
-  showEdit = false,
-  backUrl,
-  editUrl
-}: TopBarProps) {
+export function TopBar({ showPublish = false, showEdit = false, backUrl, editUrl }: TopBarProps) {
   return (
     <div className="h-14 border-b border-gray-300 px-4 flex items-center justify-between">
       <div>
