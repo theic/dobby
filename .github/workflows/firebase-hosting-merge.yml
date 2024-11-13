@@ -21,17 +21,6 @@ jobs:
           echo "FIREBASE_MESSAGING_SENDER_ID=${{ secrets.FIREBASE_MESSAGING_SENDER_ID }}" >> .env
           echo "FIREBASE_APP_ID=${{ secrets.FIREBASE_APP_ID }}" >> .env
 
-      # Create Cloud Run env vars file
-      - name: Create .env.gcp.yaml file
-        run: |
-          cat > .env.gcp.yaml << EOF
-          FIREBASE_API_KEY: "${{ secrets.FIREBASE_API_KEY }}"
-          FIREBASE_AUTH_DOMAIN: "${{ secrets.FIREBASE_AUTH_DOMAIN }}"
-          FIREBASE_PROJECT_ID: "${{ secrets.FIREBASE_PROJECT_ID }}"
-          FIREBASE_MESSAGING_SENDER_ID: "${{ secrets.FIREBASE_MESSAGING_SENDER_ID }}"
-          FIREBASE_APP_ID: "${{ secrets.FIREBASE_APP_ID }}"
-          EOF
-
       # Build for Firebase
       - run: npm ci --legacy-peer-deps && npm run build
       
@@ -53,14 +42,24 @@ jobs:
       - name: 'Set up Cloud SDK'
         uses: 'google-github-actions/setup-gcloud@v2'
 
-      # Deploy to Cloud Run directly from source
-      - name: Deploy to Cloud Run
+      # Configure Docker with gcloud credentials
+      - name: Configure Docker
+        run: gcloud auth configure-docker europe-west1-docker.pkg.dev
+
+      # Build and push the Docker image
+      - name: Build and Push Docker Image
         run: |
-          gcloud run deploy assistant-builder \
-            --source . \
-            --port 3000 \
-            --env-vars-file .env.gcp.yaml \
-            --allow-unauthenticated \
-            --region europe-west1 \
-            --min-instances 1 \
-            --project ${{ secrets.FIREBASE_PROJECT_ID }}
+          docker build -t europe-west1-docker.pkg.dev/${{ secrets.FIREBASE_PROJECT_ID }}/assistant-builder/app:${{ github.sha }} .
+          docker push europe-west1-docker.pkg.dev/${{ secrets.FIREBASE_PROJECT_ID }}/assistant-builder/app:${{ github.sha }}
+
+      # Deploy to Cloud Run using the official action
+      - name: Deploy to Cloud Run
+        id: deploy-cloud-run
+        uses: google-github-actions/deploy-cloudrun@v2.7.2
+        with:
+          service: assistant-builder
+          image: europe-west1-docker.pkg.dev/${{ secrets.FIREBASE_PROJECT_ID }}/assistant-builder/app:${{ github.sha }}
+          env_vars_file: .env
+          region: europe-west1
+          project_id: ${{ secrets.FIREBASE_PROJECT_ID }}
+          flags: --allow-unauthenticated --min-instances=1
