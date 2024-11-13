@@ -2,10 +2,18 @@ import { LangChainMessage } from '@assistant-ui/react-langgraph';
 import { Assistant, Client, Config, Metadata, Thread, ThreadState } from '@langchain/langgraph-sdk';
 import { getUserId } from './firebase-store';
 
+interface Item {
+  namespace: string[];
+  key: string;
+  value: Record<string, unknown>;
+  createdAt: string;
+  updatedAt: string;
+}
+
 const createClient = () => {
   const apiUrl = new URL('/api', window.location.href).href;
   return new Client({
-    apiUrl
+    apiUrl,
   });
 };
 
@@ -15,8 +23,8 @@ export const createThread = async (assistantId?: string): Promise<{ thread_id: s
   const thread = await client.threads.create({
     metadata: {
       user_id: userId,
-      assistant_id: assistantId
-    }
+      assistant_id: assistantId,
+    },
   });
   return { thread_id: thread.thread_id };
 };
@@ -37,10 +45,10 @@ export const sendMessage = async (params: {
   const client = createClient();
   return client.runs.stream(params.threadId, params.assistantId, {
     input: {
-      messages: params.messages
+      messages: params.messages,
     },
     streamMode: 'messages',
-    config: params.config
+    config: params.config,
   });
 };
 
@@ -57,7 +65,7 @@ export const createAssistant = async (params: {
     name: params.name,
     config: params.config,
     metadata: params.metadata,
-    assistantId: params.assistantId
+    assistantId: params.assistantId,
   });
 };
 
@@ -88,8 +96,8 @@ export const getAssistants = async (userId: string): Promise<Assistant[]> => {
   const client = createClient();
   return client.assistants.search({
     metadata: {
-      userId
-    }
+      userId,
+    },
   });
 };
 
@@ -97,8 +105,8 @@ export const getThreads = async (userId: string): Promise<Thread[]> => {
   const client = createClient();
   return client.threads.search({
     metadata: {
-      user_id: userId
-    }
+      user_id: userId,
+    },
   });
 };
 
@@ -106,4 +114,9 @@ export const getThreadMetadata = async (threadId: string): Promise<Metadata> => 
   const client = createClient();
   const thread = await client.threads.get(threadId);
   return thread.metadata;
+};
+
+export const getStoreItem = async (key: string): Promise<Item | null> => {
+  const client = createClient();
+  return client.store.getItem(['system_messages', getUserId()], key);
 };

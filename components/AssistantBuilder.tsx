@@ -4,7 +4,13 @@ import { useLangGraphRuntime } from '@assistant-ui/react-langgraph';
 import { makeMarkdownText } from '@assistant-ui/react-markdown';
 import { useRef } from 'react';
 
-import { createThread, getThreadState, sendMessage } from '@/lib/chatApi';
+import {
+  createThread,
+  getStoreItem,
+  getThreadState,
+  sendMessage,
+  updateAssistant,
+} from '@/lib/chatApi';
 import { getUserId } from '@/lib/localStorage';
 import { Thread } from '@assistant-ui/react';
 import { ToolFallback } from './tools/ToolFallback';
@@ -41,12 +47,22 @@ export function AssistantBuilder({
         },
       };
 
-      return sendMessage({
+      const response = await sendMessage({
         threadId,
         messages,
         assistantId,
         config,
       });
+
+      const storeItem = await getStoreItem(templateAssistantId);
+
+      if (storeItem?.value.name) {
+        await updateAssistant(templateAssistantId, {
+          name: storeItem.value.name as string,
+        });
+      }
+
+      return response;
     },
     onSwitchToNewThread: async () => {
       const { thread_id } = await createThread();

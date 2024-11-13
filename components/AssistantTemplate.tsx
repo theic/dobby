@@ -30,7 +30,7 @@ export function AssistantTemplate({
         threadIdRef.current = threadId;
       }
 
-      return sendMessage({
+      const response = await sendMessage({
         threadId,
         messages,
         assistantId,
@@ -41,6 +41,8 @@ export function AssistantTemplate({
           },
         },
       });
+
+      return response;
     },
     onSwitchToNewThread: async () => {
       const { thread_id } = await createThread();

@@ -20,7 +20,7 @@ export default function Home() {
         try {
           const [fetchedAssistants, fetchedThreads] = await Promise.all([
             getAssistants(user.uid),
-            getThreads(user.uid)
+            getThreads(user.uid),
           ]);
           setAssistants(fetchedAssistants);
           setThreads(fetchedThreads);
@@ -37,7 +37,7 @@ export default function Home() {
   const handleCreateThread = async (assistantId: string) => {
     try {
       const { thread_id } = await createThread(assistantId);
-      router.push(`/thread/${thread_id}?assistantId=${assistantId}`);
+      router.push(`/thread/${thread_id}/edit?assistantId=${assistantId}`);
     } catch (error) {
       console.error('Failed to create thread:', error);
     }
@@ -52,13 +52,13 @@ export default function Home() {
         graphId: 'template',
         assistantId,
         metadata: {
-          userId
+          userId,
         },
         config: {
           configurable: {
-            userId
-          }
-        }
+            userId,
+          },
+        },
       });
 
       await handleCreateThread(assistantId);
