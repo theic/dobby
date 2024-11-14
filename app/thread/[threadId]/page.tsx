@@ -19,7 +19,11 @@ export default async function ThreadPage({ params, searchParams }: Props) {
       />
       <div className="flex flex-1">
         <div className="flex-1">
-          <AssistantTemplate threadId={threadId} assistantId={assistantId as string} />
+          <AssistantTemplate
+            threadId={threadId}
+            assistantId={assistantId as string}
+            imageAttachments={true}
+          />
         </div>
       </div>
     </main>

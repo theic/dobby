@@ -2,7 +2,7 @@
 
 import { useLangGraphRuntime } from '@assistant-ui/react-langgraph';
 import { makeMarkdownText } from '@assistant-ui/react-markdown';
-import { useRef } from 'react';
+import { useEffect, useRef } from 'react';
 
 import {
   createThread,
@@ -29,6 +29,25 @@ export function AssistantBuilder({
   previewMessage?: string;
 }) {
   const threadIdRef = useRef<string | undefined>();
+
+  // TODO: Replace with a GCP event
+  useEffect(() => {
+    const checkNameUpdate = async () => {
+      const storeItem = await getStoreItem(templateAssistantId);
+      if (storeItem?.value.name) {
+        await updateAssistant(templateAssistantId, {
+          name: storeItem.value.name as string,
+        });
+      }
+    };
+
+    checkNameUpdate();
+
+    const intervalId = setInterval(checkNameUpdate, 10000);
+
+    return () => clearInterval(intervalId);
+  }, [templateAssistantId]);
+
   const runtime = useLangGraphRuntime({
     threadId: threadIdRef.current,
     stream: async (messages) => {
@@ -53,14 +72,6 @@ export function AssistantBuilder({
         assistantId,
         config,
       });
-
-      const storeItem = await getStoreItem(templateAssistantId);
-
-      if (storeItem?.value.name) {
-        await updateAssistant(templateAssistantId, {
-          name: storeItem.value.name as string,
-        });
-      }
 
       return response;
     },

@@ -13,6 +13,7 @@
     "@assistant-ui/react": "^0.5.100",
     "@assistant-ui/react-langgraph": "^0.0.25",
     "@assistant-ui/react-markdown": "^0.2.27",
+    "@heroicons/react": "^2.1.5",
     "@langchain/langgraph-sdk": "^0.0.18",
     "@radix-ui/react-avatar": "^1.1.1",
     "@radix-ui/react-dialog": "^1.1.2",

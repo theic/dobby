@@ -13,7 +13,7 @@ export default async function ThreadSettings({ params, searchParams }: Props) {
 
   return (
     <main className="h-dvh flex flex-col">
-      <TopBar backUrl={`/thread/${threadId}?assistantId=${assistantId}`} />
+      <TopBar backUrl="/" />
       <div className="flex-1 flex flex-col md:flex-row">
         <div className="flex-1 border-b md:border-b-0 md:border-r border-gray-300 flex flex-col h-[calc(50dvh-28px)] md:h-[calc(100dvh-56px)]">
           {/* <Tabs defaultValue="chat" className="flex-1 flex flex-col">

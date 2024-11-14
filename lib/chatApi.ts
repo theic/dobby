@@ -29,6 +29,11 @@ export const createThread = async (assistantId?: string): Promise<{ thread_id: s
   return { thread_id: thread.thread_id };
 };
 
+export const deleteThread = async (threadId: string) => {
+  const client = createClient();
+  return client.threads.delete(threadId);
+};
+
 export const getThreadState = async (
   threadId: string
 ): Promise<ThreadState<{ messages: LangChainMessage[] }>> => {

@@ -14,11 +14,13 @@ const MarkdownText = makeMarkdownText();
 export function AssistantTemplate({
   assistantId,
   threadId,
+  imageAttachments = false,
   welcomePrompts = [],
   previewMessage = '',
 }: {
   assistantId: string;
   threadId: string;
+  imageAttachments?: boolean;
   welcomePrompts?: string[];
   previewMessage?: string;
 }) {
@@ -53,6 +55,7 @@ export function AssistantTemplate({
       threadIdRef.current = threadId;
       return { messages: state.values.messages || [] };
     },
+    unstable_allowImageAttachments: imageAttachments,
   });
 
   useEffect(() => {
