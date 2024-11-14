@@ -58,7 +58,7 @@ jobs:
         uses: google-github-actions/deploy-cloudrun@v2.7.2
         with:
           service: assistant-builder
-          image: europe-west1-docker.pkg.dev/${{ secrets.FIREBASE_PROJECT_ID }}/assistant-builder/app:${{ github.sha }}
+          image: europe-west1-docker.pkg.dev/${{ secrets.FIREBASE_PROJECT_ID }}/cloud-run-source-deploy/assistant-builder/app:${{ github.sha }}
           env_vars_file: .env
           region: europe-west1
           project_id: ${{ secrets.FIREBASE_PROJECT_ID }}
