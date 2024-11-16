@@ -6,8 +6,9 @@ import { useEffect, useRef } from 'react';
 
 import { createThread, getThreadState, sendMessage } from '@/lib/chatApi';
 import { getUserId } from '@/lib/localStorage';
-import { Thread } from '@assistant-ui/react';
-import { ToolFallback } from './tools/ToolFallback';
+import { AssistantRuntimeProvider } from '@assistant-ui/react';
+import { WebSearchTool } from './tools/web-search/WebSearchTool';
+import { ThreadTemplate } from './ui/assistant-ui/thread-template';
 
 const MarkdownText = makeMarkdownText();
 
@@ -65,15 +66,20 @@ export function AssistantTemplate({
   }, [threadId, runtime]);
 
   return (
-    <Thread
-      runtime={runtime}
-      assistantMessage={{ components: { Text: MarkdownText, ToolFallback } }}
-      welcome={{
-        message: previewMessage,
-        suggestions: welcomePrompts.map((prompt) => ({
-          prompt,
-        })),
-      }}
-    />
+    <AssistantRuntimeProvider runtime={runtime}>
+      {/* TODO: Add tool support */}
+      <ThreadTemplate />
+      <WebSearchTool />
+    </AssistantRuntimeProvider>
+    // <Thread
+    //   runtime={runtime}
+    //   assistantMessage={{ components: { Text: MarkdownText, ToolFallback } }}
+    //   welcome={{
+    //     message: previewMessage,
+    //     suggestions: welcomePrompts.map((prompt) => ({
+    //       prompt,
+    //     })),
+    //   }}
+    // />
   );
 }

@@ -33,12 +33,7 @@ export default async function ThreadSettings({ params, searchParams }: Props) {
               <AssistantSettings assistantId={assistantId as string} />
             </TabsContent>
           </Tabs> */}
-          <AssistantBuilder
-            assistantId="builder"
-            templateAssistantId={assistantId as string}
-            welcomePrompts={['Build an assistant that always says hello']}
-            previewMessage={`I'll help you build a new GPT. You can say something like, "make a creative who helps generate visuals for new products" or "make a software engineer who helps format my code."\n\nWhat would you like to make?`}
-          />
+          <AssistantBuilder assistantId="builder" templateAssistantId={assistantId as string} />
         </div>
         <div className="flex-1 h-[calc(50dvh-28px)] md:h-[calc(100dvh-56px)]">
           <AssistantTemplate
