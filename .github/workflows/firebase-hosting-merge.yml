@@ -22,7 +22,7 @@ jobs:
           echo "FIREBASE_APP_ID=${{ secrets.FIREBASE_APP_ID }}" >> .env
 
       # Build for Firebase
-      - run: npm ci --legacy-peer-deps && npm run build
+      - run: npm ci && npm run build
       
       # Deploy to Firebase
       - uses: FirebaseExtended/action-hosting-deploy@v0
