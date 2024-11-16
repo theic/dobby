@@ -9,6 +9,7 @@ import {
   ThreadPrimitive,
 } from '@assistant-ui/react';
 import type { FC } from 'react';
+import { useEffect, useState } from 'react';
 
 import { ToolFallback } from '@/components/tools/ToolFallback';
 import { TooltipIconButton } from '@/components/ui/assistant-ui/tooltip-icon-button';
@@ -28,7 +29,51 @@ import {
 
 const MarkdownText = makeMarkdownText();
 
-export const ThreadBuilder: FC = () => {
+const AutoTypingMessage =
+  'I\'ll help you build a new GPT. You can say something like, "make a creative who helps generate visuals for new products" or "make a software engineer who helps format my code."';
+
+// Add the interface for props
+interface ThreadBuilderProps {
+  autoType?: boolean;
+}
+
+// Update the component to accept props
+export const ThreadBuilder: FC<ThreadBuilderProps> = ({ autoType = false }) => {
+  const [isTyping, setIsTyping] = useState(false);
+  const [currentMessage, setCurrentMessage] = useState('');
+
+  useEffect(() => {
+    if (!autoType) return;
+
+    // Start typing effect after a short delay
+    const timeout = setTimeout(() => {
+      setIsTyping(true);
+      let currentIndex = 0;
+
+      const typingInterval = setInterval(() => {
+        if (currentIndex < AutoTypingMessage.length) {
+          setCurrentMessage(AutoTypingMessage.slice(0, currentIndex + 1));
+          currentIndex++;
+        } else {
+          clearInterval(typingInterval);
+          // Small delay before "sending" the message
+          setTimeout(() => {
+            setIsTyping(false);
+            // Simulate clicking the send button by dispatching a click event
+            const sendButton = document.querySelector('[data-composer-send]');
+            if (sendButton instanceof HTMLElement) {
+              sendButton.click();
+            }
+          }, 500);
+        }
+      }, 15);
+
+      return () => clearInterval(typingInterval);
+    }, 1000);
+
+    return () => clearTimeout(timeout);
+  }, [autoType]);
+
   return (
     <ThreadPrimitive.Root className="bg-neutral-100 h-full">
       <ThreadPrimitive.Viewport className="flex h-full flex-col items-center overflow-y-scroll scroll-smooth bg-inherit px-4 pt-8">
@@ -46,7 +91,7 @@ export const ThreadBuilder: FC = () => {
 
         <div className="sticky bottom-0 mt-3 flex w-full max-w-2xl flex-col items-center justify-end rounded-t-lg bg-inherit pb-4">
           <MyThreadScrollToBottom />
-          <MyComposer />
+          <MyComposer isTyping={isTyping} currentMessage={currentMessage} />
         </div>
       </ThreadPrimitive.Viewport>
     </ThreadPrimitive.Root>
@@ -77,30 +122,45 @@ const MyThreadWelcome: FC = () => {
         <p className="mt-4 font-medium text-neutral-600 max-w-xl text-center">
           I'll help you build a new GPT. You can say something like, "make a creative who helps
           generate visuals for new products" or "make a software engineer who helps format my code."
-          <br />
-          <br />
-          What would you like to make?
         </p>
       </div>
     </ThreadPrimitive.Empty>
   );
 };
 
-const MyComposer: FC = () => {
+const MyComposer: FC<{ isTyping?: boolean; currentMessage?: string }> = ({
+  isTyping = false,
+  currentMessage = '',
+}) => {
+  const [userInput, setUserInput] = useState('');
+
   return (
-    <ComposerPrimitive.Root className="focus-within:border-neutral-400 flex w-full flex-wrap items-end rounded-lg border border-neutral-300 bg-white/90 px-2.5 shadow-sm backdrop-blur-sm transition-colors ease-in">
+    <ComposerPrimitive.Root
+      className="focus-within:border-neutral-400 flex w-full flex-wrap items-end rounded-lg border border-neutral-300 bg-white/90 px-2.5 shadow-sm backdrop-blur-sm transition-colors ease-in"
+      // onSubmit={(e) => {
+      //   // Prevent default form submission
+      //   e.preventDefault();
+      //   // Clear input after submission
+      //   setUserInput('');
+      // }}
+    >
       <ComposerPrimitive.Input
         autoFocus
+        // value={isTyping ? currentMessage : userInput}
+        onChange={(e) => !isTyping && setUserInput(e.target.value)}
         placeholder="Write a message..."
         rows={1}
         className="placeholder:text-neutral-400 text-neutral-700 max-h-40 flex-grow resize-none border-none bg-transparent px-2 py-4 text-sm outline-none focus:ring-0 disabled:cursor-not-allowed"
+        readOnly={isTyping}
       />
       <ThreadPrimitive.If running={false}>
         <ComposerPrimitive.Send asChild>
           <TooltipIconButton
+            data-composer-send
             tooltip="Send"
             variant="default"
             className="my-2.5 size-8 p-2 transition-opacity ease-in bg-neutral-200/80 text-neutral-700 hover:bg-neutral-300"
+            disabled={isTyping}
           >
             <SendHorizontalIcon />
           </TooltipIconButton>
