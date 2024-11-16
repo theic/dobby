@@ -9,6 +9,9 @@ const nextConfig = {
     FIREBASE_APP_ID: process.env.FIREBASE_APP_ID,
   },
   output: 'standalone',
+  images: {
+    unoptimized: true,
+  },
 };
 
 module.exports = nextConfig;

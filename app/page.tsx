@@ -160,7 +160,6 @@ export default function Home() {
                       className="w-full p-4 border border-gray-200 rounded-lg hover:border-gray-300 transition-colors bg-white shadow-sm"
                     >
                       <div className="font-medium flex items-center gap-2">
-                        <span className="text-xl">🤖</span>
                         {assistant.name || `Assistant ${assistant.assistant_id}`}
                       </div>
                       <div className="text-sm text-gray-500">
@@ -224,7 +223,6 @@ export default function Home() {
                           href={`/thread/${thread.thread_id}?assistantId=${thread.metadata?.assistant_id}`}
                           className="flex-1 flex items-center gap-2"
                         >
-                          <span className="text-xl">💭</span>
                           <div>
                             <div className="font-medium">
                               {assistants.find(
