@@ -1,5 +1,6 @@
-import { ArrowLeft, Pencil } from 'lucide-react';
+import { ArrowLeft, Pencil, Rocket } from 'lucide-react';
 import Link from 'next/link';
+import { ReactNode } from 'react';
 import { Button } from './ui/button';
 
 type TopBarProps = {
@@ -7,12 +8,19 @@ type TopBarProps = {
   showEdit?: boolean;
   backUrl?: string;
   editUrl?: string;
+  children?: ReactNode;
 };
 
-export function TopBar({ showPublish = false, showEdit = false, backUrl, editUrl }: TopBarProps) {
+export function TopBar({
+  showPublish = false,
+  showEdit = false,
+  backUrl,
+  editUrl,
+  children,
+}: TopBarProps) {
   return (
-    <div className="h-14 border-b border-gray-300 px-4 flex items-center justify-between">
-      <div>
+    <div className="h-14 border-b border-gray-200 px-4 flex items-center justify-between bg-white shadow-sm">
+      <div className="flex items-center gap-2">
         {backUrl && (
           <Link href={backUrl}>
             <Button variant="ghost" size="sm">
@@ -21,8 +29,11 @@ export function TopBar({ showPublish = false, showEdit = false, backUrl, editUrl
             </Button>
           </Link>
         )}
+        {!backUrl && <span className="text-xl">🎯</span>}
+        <span className="font-medium text-gray-600">Messaging.Quest</span>
       </div>
-      <div>
+      <div className="flex items-center gap-2">
+        {children}
         {showEdit && editUrl && (
           <Link href={editUrl}>
             <Button variant="ghost" size="sm">
@@ -31,7 +42,12 @@ export function TopBar({ showPublish = false, showEdit = false, backUrl, editUrl
             </Button>
           </Link>
         )}
-        {showPublish && <Button size="sm">Publish</Button>}
+        {showPublish && (
+          <Button size="sm">
+            <Rocket className="h-4 w-4 mr-2" />
+            Publish
+          </Button>
+        )}
       </div>
     </div>
   );

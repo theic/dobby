@@ -5,7 +5,7 @@ import { makeAssistantToolUI } from '@assistant-ui/react';
 import { ExternalLinkIcon } from 'lucide-react';
 
 type WebSearchArgs = {
-  query: string;
+  input: string;
 };
 
 type WebSearchResult = {
@@ -34,7 +34,7 @@ export const WebSearchTool = makeAssistantToolUI<WebSearchArgs, string>({
 
     return (
       <div className="mb-4 space-y-4">
-        <div className="text-sm text-muted-foreground">Search query: "{args.query}"</div>
+        <div className="text-sm text-muted-foreground">Search query: "{args.input}"</div>
 
         {resultParsed.map((result: WebSearchResult) => (
           <Card key={result.url}>

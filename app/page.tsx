@@ -1,5 +1,7 @@
 'use client';
 
+import { TopBar } from '@/components/TopBar';
+import { Button } from '@/components/ui/button';
 import {
   createAssistant,
   createThread,
@@ -12,6 +14,7 @@ import { auth } from '@/lib/firebase';
 import { getUserId } from '@/lib/localStorage';
 import { ChatBubbleLeftIcon, PencilSquareIcon, TrashIcon } from '@heroicons/react/24/outline';
 import { Assistant, Thread } from '@langchain/langgraph-sdk';
+import { Wand2 } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
@@ -114,119 +117,141 @@ export default function Home() {
 
   if (isLoading) {
     return (
-      <main className="min-h-dvh p-8">
-        <div className="max-w-6xl mx-auto">
-          <p>Loading...</p>
+      <main className="h-dvh flex flex-col">
+        <TopBar />
+        <div className="flex-1 p-8">
+          <div className="max-w-6xl mx-auto">
+            <p>Loading...</p>
+          </div>
         </div>
       </main>
     );
   }
 
   return (
-    <main className="min-h-dvh p-8">
-      <div className="max-w-6xl mx-auto">
-        <div className="flex justify-end mb-8">
-          <button
-            onClick={handleCreateAssistant}
-            className="px-6 py-3 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors"
-          >
-            <ChatBubbleLeftIcon className="w-4 h-4 mr-2" />
-            Create new assistant
-          </button>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {/* Assistants Column */}
-          <div>
-            <h2 className="text-xl font-semibold mb-4">Your Assistants</h2>
-            <div className="space-y-4">
-              {assistants.length === 0 ? (
-                <p className="text-gray-500">No assistants yet</p>
-              ) : (
-                assistants.map((assistant) => (
-                  <div
-                    key={assistant.assistant_id}
-                    className="w-full p-4 border border-gray-200 rounded-lg"
-                  >
-                    <div className="font-medium">
-                      {assistant.name || `Assistant ${assistant.assistant_id}`}
-                    </div>
-                    <div className="text-sm text-gray-500">
-                      {new Date(assistant.created_at).toLocaleDateString()} at{' '}
-                      {new Date(assistant.created_at).toLocaleTimeString([], {
-                        hour: '2-digit',
-                        minute: '2-digit',
-                      })}
-                    </div>
-                    <div className="flex gap-2 mt-3">
-                      <button
-                        onClick={() => handleCreateThread(assistant.assistant_id)}
-                        className="flex-1 flex items-center justify-center gap-1.5 px-3 py-1.5 bg-gray-600 text-white text-sm rounded hover:bg-gray-700 transition-colors"
-                      >
-                        <ChatBubbleLeftIcon className="w-4 h-4" />
-                        <span>New chat</span>
-                      </button>
-                      <button
-                        onClick={() => handleEditAssistant(assistant.assistant_id)}
-                        className="p-1.5 border border-gray-300 rounded hover:bg-gray-50 transition-colors"
-                        title="Edit assistant"
-                      >
-                        <PencilSquareIcon className="w-5 h-5 text-gray-600" />
-                      </button>
-                      <button
-                        onClick={() => handleDeleteAssistant(assistant.assistant_id)}
-                        className="p-1.5 border border-gray-300 rounded hover:bg-gray-50 transition-colors"
-                        title="Delete assistant"
-                      >
-                        <TrashIcon className="w-5 h-5 text-red-600" />
-                      </button>
-                    </div>
-                  </div>
-                ))
-              )}
-            </div>
-          </div>
-
-          {/* Threads Column */}
-          <div>
-            <h2 className="text-xl font-semibold mb-4">Recent Conversations</h2>
-            <div className="space-y-4">
-              {threads.length === 0 ? (
-                <p className="text-gray-500">No conversations yet</p>
-              ) : (
-                threads
-                  .filter((thread) => thread.metadata?.assistant_id)
-                  .map((thread) => (
+    <main className="h-dvh flex flex-col">
+      <TopBar>
+        <Button
+          onClick={handleCreateAssistant}
+          size="default"
+          className="bg-gray-600 hover:bg-gray-700"
+        >
+          <Wand2 className="h-4 w-4 mr-2" />
+          Create new assistant
+        </Button>
+      </TopBar>
+      <div className="flex-1 p-8">
+        <div className="max-w-6xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {/* Assistants Column */}
+            <div>
+              <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
+                <span className="text-2xl">🧙‍♂️</span> Your Assistants
+              </h2>
+              <div className="space-y-4">
+                {assistants.length === 0 ? (
+                  <p className="text-gray-500 flex items-center gap-2">
+                    <span className="text-xl">✨</span> No assistants yet
+                  </p>
+                ) : (
+                  assistants.map((assistant) => (
                     <div
-                      key={thread.thread_id}
-                      className="flex items-start gap-2 p-4 border border-gray-200 rounded-lg"
+                      key={assistant.assistant_id}
+                      className="w-full p-4 border border-gray-200 rounded-lg hover:border-gray-300 transition-colors bg-white shadow-sm"
                     >
-                      <Link
-                        href={`/thread/${thread.thread_id}?assistantId=${thread.metadata?.assistant_id}`}
-                        className="flex-1"
-                      >
-                        <div className="font-medium">
-                          {assistants.find((a) => a.assistant_id === thread.metadata?.assistant_id)
-                            ?.name || `Untitled`}
-                        </div>
-                        <div className="text-sm text-gray-500">
-                          {new Date(thread.created_at).toLocaleDateString()} at{' '}
-                          {new Date(thread.created_at).toLocaleTimeString([], {
-                            hour: '2-digit',
-                            minute: '2-digit',
-                          })}
-                        </div>
-                      </Link>
-                      <button
-                        onClick={() => handleDeleteThread(thread.thread_id)}
-                        className="p-1.5 border border-gray-300 rounded hover:bg-gray-50 transition-colors"
-                        title="Delete conversation"
-                      >
-                        <TrashIcon className="w-5 h-5 text-red-600" />
-                      </button>
+                      <div className="font-medium flex items-center gap-2">
+                        <span className="text-xl">🤖</span>
+                        {assistant.name || `Assistant ${assistant.assistant_id}`}
+                      </div>
+                      <div className="text-sm text-gray-500">
+                        {new Date(assistant.created_at).toLocaleDateString()} at{' '}
+                        {new Date(assistant.created_at).toLocaleTimeString([], {
+                          hour: '2-digit',
+                          minute: '2-digit',
+                        })}
+                      </div>
+                      <div className="flex gap-2 mt-3">
+                        <Button
+                          onClick={() => handleCreateThread(assistant.assistant_id)}
+                          className="flex-1 bg-gray-600 hover:bg-gray-700"
+                          size="sm"
+                        >
+                          <ChatBubbleLeftIcon className="h-4 w-4 mr-2" />
+                          <span>New chat</span>
+                        </Button>
+                        <Button
+                          onClick={() => handleEditAssistant(assistant.assistant_id)}
+                          variant="outline"
+                          size="icon"
+                          title="Edit assistant"
+                        >
+                          <PencilSquareIcon className="h-4 w-4" />
+                        </Button>
+                        <Button
+                          onClick={() => handleDeleteAssistant(assistant.assistant_id)}
+                          variant="outline"
+                          size="icon"
+                          title="Delete assistant"
+                        >
+                          <TrashIcon className="h-4 w-4" />
+                        </Button>
+                      </div>
                     </div>
                   ))
-              )}
+                )}
+              </div>
+            </div>
+
+            {/* Threads Column */}
+            <div>
+              <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
+                <span className="text-2xl">📜</span> Recent Conversations
+              </h2>
+              <div className="space-y-4">
+                {threads.length === 0 ? (
+                  <p className="text-gray-500 flex items-center gap-2">
+                    <span className="text-xl">✨</span> No conversations yet
+                  </p>
+                ) : (
+                  threads
+                    .filter((thread) => thread.metadata?.assistant_id)
+                    .map((thread) => (
+                      <div
+                        key={thread.thread_id}
+                        className="flex items-start gap-2 p-4 border border-gray-200 rounded-lg hover:border-gray-300 transition-colors bg-white shadow-sm"
+                      >
+                        <Link
+                          href={`/thread/${thread.thread_id}?assistantId=${thread.metadata?.assistant_id}`}
+                          className="flex-1 flex items-center gap-2"
+                        >
+                          <span className="text-xl">💭</span>
+                          <div>
+                            <div className="font-medium">
+                              {assistants.find(
+                                (a) => a.assistant_id === thread.metadata?.assistant_id
+                              )?.name || `Untitled`}
+                            </div>
+                            <div className="text-sm text-gray-500">
+                              {new Date(thread.created_at).toLocaleDateString()} at{' '}
+                              {new Date(thread.created_at).toLocaleTimeString([], {
+                                hour: '2-digit',
+                                minute: '2-digit',
+                              })}
+                            </div>
+                          </div>
+                        </Link>
+                        <Button
+                          onClick={() => handleDeleteThread(thread.thread_id)}
+                          variant="outline"
+                          size="icon"
+                          title="Delete conversation"
+                        >
+                          <TrashIcon className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    ))
+                )}
+              </div>
             </div>
           </div>
         </div>
