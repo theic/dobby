@@ -18,9 +18,6 @@ type WebSearchResult = {
 export const WebSearchTool = makeAssistantToolUI<WebSearchArgs, string>({
   toolName: 'web_search',
   render: function WebSearchUI({ args, result }) {
-    console.log('args', args);
-    console.log('result', result);
-
     let resultParsed: WebSearchResult[];
     try {
       resultParsed = result ? JSON.parse(result) : [];

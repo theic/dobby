@@ -12,6 +12,7 @@ import {
 } from '@/lib/chatApi';
 import { getUserId } from '@/lib/localStorage';
 import { AssistantRuntimeProvider } from '@assistant-ui/react';
+import { UpsertSystemTool } from './tools/upsert-system/upsertSystemMessage';
 import { ThreadBuilder } from './ui/assistant-ui/thread-builder';
 
 export function AssistantBuilder({
@@ -82,7 +83,8 @@ export function AssistantBuilder({
   return (
     <AssistantRuntimeProvider runtime={runtime}>
       {/* TODO: Add tool support */}
-      <ThreadBuilder />
+      <ThreadBuilder autoType={false} />
+      <UpsertSystemTool />
     </AssistantRuntimeProvider>
   );
 }

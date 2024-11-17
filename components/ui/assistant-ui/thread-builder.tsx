@@ -19,8 +19,7 @@ import { ArrowDownIcon, CheckIcon, CopyIcon, SendHorizontalIcon } from 'lucide-r
 
 const MarkdownText = makeMarkdownText();
 
-const AutoTypingMessage =
-  'I\'ll help you build a new GPT. You can say something like, "make a creative who helps generate visuals for new products" or "make a software engineer who helps format my code."';
+const AutoTypingMessage = 'make a creative who helps generate visuals for new products';
 
 // Add the interface for props
 interface ThreadBuilderProps {
@@ -126,20 +125,12 @@ const MyComposer: FC<{ isTyping?: boolean; currentMessage?: string }> = ({
   const [userInput, setUserInput] = useState('');
 
   return (
-    <ComposerPrimitive.Root
-      className="focus-within:border-neutral-400 flex w-full flex-wrap items-end rounded-lg border border-neutral-300 bg-white/90 px-2.5 shadow-sm backdrop-blur-sm transition-colors ease-in"
-      // onSubmit={(e) => {
-      //   // Prevent default form submission
-      //   e.preventDefault();
-      //   // Clear input after submission
-      //   setUserInput('');
-      // }}
-    >
+    <ComposerPrimitive.Root className="focus-within:border-neutral-400 flex w-full flex-wrap items-end rounded-lg border border-neutral-300 bg-white/90 px-2.5 shadow-sm backdrop-blur-sm transition-colors ease-in">
       <ComposerPrimitive.Input
         autoFocus
         // value={isTyping ? currentMessage : userInput}
         onChange={(e) => !isTyping && setUserInput(e.target.value)}
-        placeholder="Write a message..."
+        placeholder="Write a instruction..."
         rows={1}
         className="placeholder:text-neutral-400 text-neutral-700 max-h-40 flex-grow resize-none border-none bg-transparent px-2 py-4 text-sm outline-none focus:ring-0 disabled:cursor-not-allowed"
         readOnly={isTyping}
