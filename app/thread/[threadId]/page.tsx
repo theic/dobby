@@ -17,7 +17,7 @@ export default async function ThreadPage({ params, searchParams }: Props) {
         showEdit
         editUrl={`/thread/${threadId}/edit?assistantId=${assistantId}`}
       />
-      <div className="flex flex-1">
+      <div className="flex flex-1 pt-14">
         <div className="flex-1">
           <AssistantTemplate
             threadId={threadId}

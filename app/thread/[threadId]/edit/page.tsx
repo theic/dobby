@@ -12,30 +12,13 @@ export default async function ThreadSettings({ params, searchParams }: Props) {
   const { assistantId } = await searchParams;
 
   return (
-    <main className="h-dvh flex flex-col">
+    <main className="min-h-dvh flex flex-col bg-gradient-to-br from-slate-50 to-slate-100">
       <TopBar backUrl="/" />
       <div className="flex-1 flex flex-col md:flex-row">
-        <div className="flex-1 border-b md:border-b-0 md:border-r border-gray-300 flex flex-col h-[calc(50dvh-28px)] md:h-[calc(100dvh-56px)]">
-          {/* <Tabs defaultValue="chat" className="flex-1 flex flex-col">
-            <TabsList className="mx-4 mt-2">
-              <TabsTrigger value="chat">Assistant</TabsTrigger>
-              <TabsTrigger value="settings">Settings</TabsTrigger>
-            </TabsList>
-            <TabsContent value="chat" className="flex-1 overflow-hidden">
-              <AssistantBuilder
-                assistantId="builder"
-                templateAssistantId={assistantId as string}
-                welcomePrompts={['Build an assistant that always says hello']}
-                previewMessage={`I'll help you build a new GPT. You can say something like, "make a creative who helps generate visuals for new products" or "make a software engineer who helps format my code."\n\nWhat would you like to make?`}
-              />
-            </TabsContent>
-            <TabsContent value="settings" className="flex-1 overflow-hidden">
-              <AssistantSettings assistantId={assistantId as string} />
-            </TabsContent>
-          </Tabs> */}
+        <div className="flex-1 border-b md:border-b-0 md:border-r border-slate-200 flex flex-col h-[calc(50dvh-28px)] md:h-[calc(100dvh-56px)] bg-white/70 backdrop-blur-sm">
           <AssistantBuilder assistantId="builder" templateAssistantId={assistantId as string} />
         </div>
-        <div className="flex-1 h-[calc(50dvh-28px)] md:h-[calc(100dvh-56px)]">
+        <div className="flex-1 h-[calc(50dvh-28px)] md:h-[calc(100dvh-56px)] bg-white/70 backdrop-blur-sm">
           <AssistantTemplate
             threadId={threadId}
             assistantId={assistantId as string}

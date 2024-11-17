@@ -2,6 +2,8 @@
 
 import {
   ActionBarPrimitive,
+  AttachmentUI,
+  Composer,
   ComposerPrimitive,
   MessagePrimitive,
   ThreadPrimitive,
@@ -70,7 +72,9 @@ const MyThreadWelcome: FC = () => {
 const MyComposer: FC = () => {
   return (
     <ComposerPrimitive.Root className="focus-within:border-gray-300 flex w-full flex-wrap items-end rounded-lg border border-gray-200 bg-white px-2.5 shadow-sm transition-colors ease-in">
-      <ComposerPrimitive.Input
+      <Composer.Attachments components={{ Image: MyAttachmentUI }} />
+      <Composer.AddAttachment />
+      <Composer.Input
         placeholder="Write a message..."
         rows={1}
         className="placeholder:text-gray-400 text-gray-900 max-h-40 flex-grow resize-none border-none bg-transparent px-2 py-4 text-sm outline-none focus:ring-0 disabled:cursor-not-allowed"
@@ -98,6 +102,14 @@ const MyComposer: FC = () => {
         </ComposerPrimitive.Cancel>
       </ThreadPrimitive.If>
     </ComposerPrimitive.Root>
+  );
+};
+
+const MyAttachmentUI: FC = () => {
+  return (
+    <AttachmentUI.Root>
+      <AttachmentUI.Remove />
+    </AttachmentUI.Root>
   );
 };
 
