@@ -29,7 +29,6 @@ export function TopBar({
             </Button>
           </Link>
         )}
-        {!backUrl && <span className="text-xl">🎯</span>}
         <span className="font-medium text-gray-600">Messaging.Quest</span>
       </div>
       <div className="flex items-center gap-2">

@@ -3,8 +3,6 @@
 
 import {
   ActionBarPrimitive,
-  BranchPickerPrimitive,
-  BranchPickerPrimitiveRootProps,
   ComposerPrimitive,
   MessagePrimitive,
   ThreadPrimitive,
@@ -16,17 +14,8 @@ import { ToolFallback } from '@/components/tools/ToolFallback';
 import { TooltipIconButton } from '@/components/ui/assistant-ui/tooltip-icon-button';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
-import { cn } from '@/lib/utils';
 import { makeMarkdownText } from '@assistant-ui/react-markdown';
-import {
-  ArrowDownIcon,
-  CheckIcon,
-  ChevronLeftIcon,
-  ChevronRightIcon,
-  CopyIcon,
-  RefreshCwIcon,
-  SendHorizontalIcon,
-} from 'lucide-react';
+import { ArrowDownIcon, CheckIcon, CopyIcon, SendHorizontalIcon } from 'lucide-react';
 
 const MarkdownText = makeMarkdownText();
 
@@ -191,8 +180,6 @@ const MyUserMessage: FC = () => {
       <div className="bg-white text-neutral-800 col-start-2 row-start-1 max-w-xl break-words rounded-3xl px-5 py-2.5 shadow-sm">
         <MessagePrimitive.Content />
       </div>
-
-      <MyBranchPicker className="col-span-full col-start-1 row-start-2 -mr-1 justify-end" />
     </MessagePrimitive.Root>
   );
 };
@@ -252,8 +239,6 @@ const MyAssistantMessage: FC = () => {
       </div>
 
       <MyAssistantActionBar />
-
-      <MyBranchPicker className="col-start-2 row-start-2 -ml-2 mr-2" />
     </MessagePrimitive.Root>
   );
 };
@@ -276,45 +261,7 @@ const MyAssistantActionBar: FC = () => {
           </MessagePrimitive.If>
         </TooltipIconButton>
       </ActionBarPrimitive.Copy>
-      <ActionBarPrimitive.Reload asChild>
-        <TooltipIconButton
-          tooltip="Refresh"
-          className="hover:text-neutral-300 hover:bg-neutral-700/50"
-        >
-          <RefreshCwIcon />
-        </TooltipIconButton>
-      </ActionBarPrimitive.Reload>
     </ActionBarPrimitive.Root>
-  );
-};
-
-const MyBranchPicker: FC<BranchPickerPrimitiveRootProps> = ({ className, ...rest }) => {
-  return (
-    <BranchPickerPrimitive.Root
-      hideWhenSingleBranch
-      className={cn('text-neutral-500 inline-flex items-center text-xs', className)}
-      {...rest}
-    >
-      <BranchPickerPrimitive.Previous asChild>
-        <TooltipIconButton
-          tooltip="Previous"
-          className="hover:text-neutral-700 hover:bg-neutral-100"
-        >
-          <ChevronLeftIcon />
-        </TooltipIconButton>
-      </BranchPickerPrimitive.Previous>
-      <span className="font-medium">
-        <BranchPickerPrimitive.Number /> / <BranchPickerPrimitive.Count />
-      </span>
-      <BranchPickerPrimitive.Next asChild>
-        <TooltipIconButton
-          tooltip="Next"
-          className="hover:text-neutral-300 hover:bg-neutral-700/50"
-        >
-          <ChevronRightIcon />
-        </TooltipIconButton>
-      </BranchPickerPrimitive.Next>
-    </BranchPickerPrimitive.Root>
   );
 };
 
