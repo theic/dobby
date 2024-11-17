@@ -1,23 +1,17 @@
 'use client';
 
-import { useLangGraphRuntime } from '@assistant-ui/react-langgraph';
-import { makeMarkdownText } from '@assistant-ui/react-markdown';
-import { useEffect, useRef } from 'react';
-
 import { createThread, getThreadState, sendMessage } from '@/lib/chatApi';
 import { getUserId } from '@/lib/localStorage';
 import { AssistantRuntimeProvider } from '@assistant-ui/react';
+import { useLangGraphRuntime } from '@assistant-ui/react-langgraph';
+import { useEffect, useRef } from 'react';
 import { WebSearchTool } from './tools/web-search/WebSearchTool';
 import { ThreadTemplate } from './ui/assistant-ui/thread-template';
-
-const MarkdownText = makeMarkdownText();
 
 export function AssistantTemplate({
   assistantId,
   threadId,
   imageAttachments = false,
-  welcomePrompts = [],
-  previewMessage = '',
 }: {
   assistantId: string;
   threadId: string;

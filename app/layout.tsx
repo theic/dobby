@@ -1,6 +1,6 @@
 'use client';
 
-import '../public/styles/globals.css';
+import '../styles/globals.css';
 import UserIdProvider from './providers/UserIdProvider';
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

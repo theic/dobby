@@ -1,7 +1,6 @@
 'use client';
 
 import { useLangGraphRuntime } from '@assistant-ui/react-langgraph';
-import { makeMarkdownText } from '@assistant-ui/react-markdown';
 import { useEffect, useRef } from 'react';
 
 import {
@@ -14,8 +13,6 @@ import {
 import { getUserId } from '@/lib/localStorage';
 import { AssistantRuntimeProvider } from '@assistant-ui/react';
 import { ThreadBuilder } from './ui/assistant-ui/thread-builder';
-
-const MarkdownText = makeMarkdownText();
 
 export function AssistantBuilder({
   assistantId,
@@ -87,15 +84,5 @@ export function AssistantBuilder({
       {/* TODO: Add tool support */}
       <ThreadBuilder />
     </AssistantRuntimeProvider>
-    // <Thread
-    //   runtime={runtime}
-    //   assistantMessage={{ components: { Text: MarkdownText, ToolFallback } }}
-    //   welcome={{
-    //     message: previewMessage,
-    //     suggestions: welcomePrompts.map((prompt) => ({
-    //       prompt,
-    //     })),
-    //   }}
-    // />
   );
 }

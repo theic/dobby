@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 'use client';
 
 import {
@@ -120,8 +121,9 @@ const MyThreadWelcome: FC = () => {
           <AvatarFallback>C</AvatarFallback>
         </Avatar>
         <p className="mt-4 font-medium text-neutral-600 max-w-xl text-center">
-          I'll help you build a new GPT. You can say something like, "make a creative who helps
-          generate visuals for new products" or "make a software engineer who helps format my code."
+          I&apos;ll help you build a new GPT. You can say something like, &quot;make a creative who
+          helps generate visuals for new products&quot; or &quot;make a software engineer who helps
+          format my code.&quot;
         </p>
       </div>
     </ThreadPrimitive.Empty>

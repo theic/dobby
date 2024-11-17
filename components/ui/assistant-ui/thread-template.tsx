@@ -13,7 +13,6 @@ import type { FC } from 'react';
 import { ToolFallback } from '@/components/tools/ToolFallback';
 import { TooltipIconButton } from '@/components/ui/assistant-ui/tooltip-icon-button';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
-import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { makeMarkdownText } from '@assistant-ui/react-markdown';
 import {
@@ -140,23 +139,6 @@ const MyUserActionBar: FC = () => {
         </TooltipIconButton>
       </ActionBarPrimitive.Edit> */}
     </ActionBarPrimitive.Root>
-  );
-};
-
-const MyEditComposer: FC = () => {
-  return (
-    <ComposerPrimitive.Root className="bg-gray-100 my-4 flex w-full max-w-2xl flex-col gap-2 rounded-xl">
-      <ComposerPrimitive.Input className="text-gray-900 flex h-8 w-full resize-none border-none bg-transparent p-4 pb-0 outline-none focus:ring-0" />
-
-      <div className="mx-3 mb-3 flex items-center justify-center gap-2 self-end">
-        <ComposerPrimitive.Cancel asChild>
-          <Button variant="ghost">Cancel</Button>
-        </ComposerPrimitive.Cancel>
-        <ComposerPrimitive.Send asChild>
-          <Button>Send</Button>
-        </ComposerPrimitive.Send>
-      </div>
-    </ComposerPrimitive.Root>
   );
 };
 

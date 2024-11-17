@@ -24,7 +24,7 @@ export const WebSearchTool = makeAssistantToolUI<WebSearchArgs, string>({
     let resultParsed: WebSearchResult[];
     try {
       resultParsed = result ? JSON.parse(result) : [];
-    } catch (e) {
+    } catch {
       return (
         <div className="mb-4">
           <p className="text-red-500">Error parsing search results: {result}</p>
@@ -34,7 +34,7 @@ export const WebSearchTool = makeAssistantToolUI<WebSearchArgs, string>({
 
     return (
       <div className="mb-4 space-y-4">
-        <div className="text-sm text-muted-foreground">Search query: "{args.input}"</div>
+        <div className="text-sm text-muted-foreground">Search query: &quot;{args.input}&quot;</div>
 
         {resultParsed.map((result: WebSearchResult) => (
           <Card key={result.url}>
