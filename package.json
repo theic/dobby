@@ -1,7 +1,7 @@
 {
-  "name": "assistant-builder",
+  "name": "messaging-quest",
   "description": "Dobby lets anyone create and share custom AI assistants with just natural language, giving instant feedback and easy web publishing—no magic spells needed.",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "private": true,
   "scripts": {
     "dev": "next dev --turbo",
@@ -14,8 +14,8 @@
     "prepare": "husky install"
   },
   "dependencies": {
-    "@assistant-ui/react": "^0.5.100",
-    "@assistant-ui/react-langgraph": "^0.0.25",
+    "@assistant-ui/react": "^0.7.7",
+    "@assistant-ui/react-langgraph": "^0.1.5",
     "@assistant-ui/react-markdown": "^0.2.27",
     "@heroicons/react": "^2.1.5",
     "@langchain/langgraph-sdk": "^0.0.18",
@@ -38,6 +38,9 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-resizable-panels": "^2.1.6",
+    "rehype-katex": "^7.0.1",
+    "remark-gfm": "^4.0.0",
+    "remark-math": "^6.0.0",
     "tailwind-merge": "^2.5.4",
     "tailwindcss-animate": "^1.0.7",
     "uuid": "^11.0.2",

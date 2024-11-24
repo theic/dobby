@@ -10,15 +10,18 @@ import {
 } from '@assistant-ui/react';
 import type { FC } from 'react';
 
-import { ToolFallback } from '@/components/tools/ToolFallback';
 import { TooltipIconButton } from '@/components/ui/assistant-ui/tooltip-icon-button';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import { useStore } from '@/lib/store';
 import { makeMarkdownText } from '@assistant-ui/react-markdown';
 import { ArrowDownIcon, CheckIcon, CopyIcon, SendHorizontalIcon } from 'lucide-react';
+import { SuggestionGrid } from './suggestion-grid';
 
 const MarkdownText = makeMarkdownText();
 
 export const ThreadTemplate: FC = () => {
+  const { suggestions } = useStore();
+
   return (
     <ThreadPrimitive.Root className="bg-background h-full">
       <ThreadPrimitive.Viewport className="flex h-full flex-col items-center overflow-y-scroll scroll-smooth bg-inherit px-4 pt-8">
@@ -37,6 +40,9 @@ export const ThreadTemplate: FC = () => {
           <MyThreadScrollToBottom />
           <MyComposer />
         </div>
+
+        {suggestions && <SuggestionGrid suggestions={suggestions} />}
+        <br />
       </ThreadPrimitive.Viewport>
     </ThreadPrimitive.Root>
   );
@@ -131,13 +137,7 @@ const MyUserActionBar: FC = () => {
       hideWhenRunning
       autohide="not-last"
       className="col-start-1 mr-3 mt-2.5 flex flex-col items-end"
-    >
-      {/* <ActionBarPrimitive.Edit asChild>
-        <TooltipIconButton tooltip="Edit">
-          <PencilIcon />
-        </TooltipIconButton>
-      </ActionBarPrimitive.Edit> */}
-    </ActionBarPrimitive.Root>
+    ></ActionBarPrimitive.Root>
   );
 };
 
@@ -149,9 +149,7 @@ const MyAssistantMessage: FC = () => {
       </Avatar>
 
       <div className="text-foreground col-span-2 col-start-2 row-start-1 my-1.5 max-w-xl break-words leading-7">
-        <MessagePrimitive.Content
-          components={{ Text: MarkdownText, tools: { Fallback: ToolFallback } }}
-        />
+        <MessagePrimitive.Content components={{ Text: MarkdownText }} />
       </div>
 
       <MyAssistantActionBar />
@@ -165,7 +163,7 @@ const MyAssistantActionBar: FC = () => {
       hideWhenRunning
       autohide="not-last"
       autohideFloat="single-branch"
-      className="text-gray-500 data-[floating]:bg-white col-start-3 row-start-2 -ml-1 flex gap-1 data-[floating]:absolute data-[floating]:rounded-md data-[floating]:border data-[floating]:border-gray-200 data-[floating]:p-1 data-[floating]:shadow-sm"
+      className="text-muted-foreground data-[floating]:bg-background col-start-3 row-start-2 -ml-1 flex gap-1 data-[floating]:absolute data-[floating]:rounded-md data-[floating]:border data-[floating]:p-1 data-[floating]:shadow-sm"
     >
       <ActionBarPrimitive.Copy asChild>
         <TooltipIconButton tooltip="Copy">

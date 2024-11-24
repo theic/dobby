@@ -1,21 +1,20 @@
 'use client';
 
 import { makeAssistantToolUI } from '@assistant-ui/react';
-import { diffChars } from 'diff';
+import { diffWords } from 'diff';
 import { CheckCircle } from 'lucide-react';
 import YAML from 'yaml';
 
 type UpsertSystemArgs = {
-  name: string;
-  system_message: string;
+  assistantName: string;
+  mainInstruction: string;
+  inlineOptionsInstruction: string;
+  mainOptionsInstruction: string;
 };
 
-type UpsertSystemResult = {
+type UpsertSystemResult = UpsertSystemArgs & {
   success: boolean;
-  system_message: string;
-  name: string;
-  system_message_old: string;
-  name_old: string;
+  old: UpsertSystemArgs;
 };
 
 function formatYaml(content: string) {
@@ -34,7 +33,7 @@ function formatYaml(content: string) {
 }
 
 function DiffView({ oldText, newText }: { oldText: string; newText: string }) {
-  const diff = diffChars(oldText, newText);
+  const diff = diffWords(oldText, newText, { ignoreCase: true });
 
   return (
     <pre className="w-full overflow-y-auto rounded-lg bg-gray-50 p-4 font-mono text-sm whitespace-pre-wrap break-words">
@@ -64,40 +63,54 @@ export const UpsertSystemTool = makeAssistantToolUI<UpsertSystemArgs, string>({
         ? JSON.parse(result)
         : {
             success: false,
-            system_message: '',
-            name: '',
-            system_message_old: '',
-            name_old: '',
+            assistantName: '',
+            mainInstruction: '',
+            inlineOptionsInstruction: '',
+            mainOptionsInstruction: '',
+            old: {
+              assistantName: '',
+              mainInstruction: '',
+              inlineOptionsInstruction: '',
+              mainOptionsInstruction: '',
+            },
           };
     } catch {
       resultObj = {
         success: false,
-        system_message: '',
-        name: '',
-        system_message_old: '',
-        name_old: '',
+        assistantName: '',
+        mainInstruction: '',
+        inlineOptionsInstruction: '',
+        mainOptionsInstruction: '',
+        old: {
+          assistantName: '',
+          mainInstruction: '',
+          inlineOptionsInstruction: '',
+          mainOptionsInstruction: '',
+        },
       };
     }
 
-    console.log('resultObj', resultObj);
+    console.debug('resultObj', resultObj);
 
     // Don't process if we don't have the required data
-    if (!args?.name && !args?.system_message) {
+    if (!args?.assistantName && !args?.mainInstruction) {
       return <p className="text-gray-500">Waiting for data...</p>;
     }
 
     // Format the complete state as YAML for diffing
     const oldState = {
-      name: resultObj.name_old,
-      system_message: resultObj.system_message_old,
+      assistantName: resultObj.old.assistantName,
+      mainInstruction: resultObj.old.mainInstruction,
+      inlineOptionsInstruction: resultObj.old.inlineOptionsInstruction,
     };
 
     const newState = {
-      name: resultObj.name,
-      system_message: resultObj.system_message,
+      assistantName: resultObj.assistantName,
+      mainInstruction: resultObj.mainInstruction,
+      inlineOptionsInstruction: resultObj.inlineOptionsInstruction,
     };
 
-    console.log('newState', newState);
+    console.debug('newState', newState);
 
     const formattedOldState = formatYaml(JSON.stringify(oldState));
     const formattedNewState = formatYaml(JSON.stringify(newState));

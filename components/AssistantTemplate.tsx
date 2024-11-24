@@ -2,9 +2,11 @@
 
 import { createThread, getThreadState, sendMessage } from '@/lib/chatApi';
 import { getUserId } from '@/lib/localStorage';
+import { useStore } from '@/lib/store';
 import { AssistantRuntimeProvider } from '@assistant-ui/react';
 import { useLangGraphRuntime } from '@assistant-ui/react-langgraph';
 import { useEffect, useRef } from 'react';
+import { InlineControl } from './tools/inline-control/InlineControl';
 import { WebSearchTool } from './tools/web-search/WebSearchTool';
 import { ThreadTemplate } from './ui/assistant-ui/thread-template';
 
@@ -20,6 +22,8 @@ export function AssistantTemplate({
   previewMessage?: string;
 }) {
   const threadIdRef = useRef<string | undefined>(threadId);
+  const store = useStore();
+
   const runtime = useLangGraphRuntime({
     threadId: threadIdRef.current,
     stream: async (messages) => {
@@ -27,17 +31,26 @@ export function AssistantTemplate({
         threadIdRef.current = threadId;
       }
 
-      const response = await sendMessage({
+      const params = {
         threadId,
-        messages,
+        messages: messages.map((message) => ({
+          ...message,
+        })),
         assistantId,
         config: {
           configurable: {
             assistantId,
             userId: getUserId(),
+            inlineOptionContext: store.suggestionContext ?? '',
           },
         },
-      });
+      };
+
+      store.setSuggestionContext('');
+
+      console.debug('sending message params', params);
+
+      const response = await sendMessage(params);
 
       return response;
     },
@@ -59,21 +72,13 @@ export function AssistantTemplate({
     }
   }, [threadId, runtime]);
 
+  console.debug('Current suggestion context:', store.suggestionContext);
+
   return (
     <AssistantRuntimeProvider runtime={runtime}>
-      {/* TODO: Add tool support */}
       <ThreadTemplate />
       <WebSearchTool />
+      <InlineControl />
     </AssistantRuntimeProvider>
-    // <Thread
-    //   runtime={runtime}
-    //   assistantMessage={{ components: { Text: MarkdownText, ToolFallback } }}
-    //   welcome={{
-    //     message: previewMessage,
-    //     suggestions: welcomePrompts.map((prompt) => ({
-    //       prompt,
-    //     })),
-    //   }}
-    // />
   );
 }

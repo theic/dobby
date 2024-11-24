@@ -8,7 +8,7 @@ import {
   ThreadPrimitive,
 } from '@assistant-ui/react';
 import type { FC } from 'react';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 import { ToolFallback } from '@/components/tools/ToolFallback';
 import { TooltipIconButton } from '@/components/ui/assistant-ui/tooltip-icon-button';
@@ -19,49 +19,13 @@ import { ArrowDownIcon, CheckIcon, CopyIcon, SendHorizontalIcon } from 'lucide-r
 
 const MarkdownText = makeMarkdownText();
 
-const AutoTypingMessage = 'make a creative who helps generate visuals for new products';
-
-// Add the interface for props
 interface ThreadBuilderProps {
   autoType?: boolean;
 }
 
-// Update the component to accept props
 export const ThreadBuilder: FC<ThreadBuilderProps> = ({ autoType = false }) => {
   const [isTyping, setIsTyping] = useState(false);
   const [currentMessage, setCurrentMessage] = useState('');
-
-  useEffect(() => {
-    if (!autoType) return;
-
-    // Start typing effect after a short delay
-    const timeout = setTimeout(() => {
-      setIsTyping(true);
-      let currentIndex = 0;
-
-      const typingInterval = setInterval(() => {
-        if (currentIndex < AutoTypingMessage.length) {
-          setCurrentMessage(AutoTypingMessage.slice(0, currentIndex + 1));
-          currentIndex++;
-        } else {
-          clearInterval(typingInterval);
-          // Small delay before "sending" the message
-          setTimeout(() => {
-            setIsTyping(false);
-            // Simulate clicking the send button by dispatching a click event
-            const sendButton = document.querySelector('[data-composer-send]');
-            if (sendButton instanceof HTMLElement) {
-              sendButton.click();
-            }
-          }, 500);
-        }
-      }, 15);
-
-      return () => clearInterval(typingInterval);
-    }, 1000);
-
-    return () => clearTimeout(timeout);
-  }, [autoType]);
 
   return (
     <ThreadPrimitive.Root className="bg-neutral-100 h-full">
@@ -109,9 +73,9 @@ const MyThreadWelcome: FC = () => {
           <AvatarFallback>C</AvatarFallback>
         </Avatar>
         <p className="mt-4 font-medium text-neutral-600 max-w-xl text-center">
-          I&apos;ll help you build a new GPT. You can say something like, &quot;make a creative who
-          helps generate visuals for new products&quot; or &quot;make a software engineer who helps
-          format my code.&quot;
+          GPT Wizard I&apos;ll help you build a new GPT. You can say something like, &quot;make a
+          creative who helps generate visuals for new products&quot; or &quot;make a software
+          engineer who helps format my code.&quot;
         </p>
       </div>
     </ThreadPrimitive.Empty>

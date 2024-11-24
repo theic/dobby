@@ -23,6 +23,7 @@ export function AssistantBuilder({
   templateAssistantId: string;
 }) {
   const threadIdRef = useRef<string | undefined>();
+  // const messageRuntime = useMessageRuntime();
 
   // TODO: Replace with a GCP event
   useEffect(() => {
@@ -82,6 +83,7 @@ export function AssistantBuilder({
 
   return (
     <AssistantRuntimeProvider runtime={runtime}>
+      {/* <MyDataContext.Provider data={{}}> */}
       {/* TODO: Add tool support */}
       <ThreadBuilder autoType={false} />
       <UpsertSystemTool />

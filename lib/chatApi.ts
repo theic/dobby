@@ -46,6 +46,7 @@ export const sendMessage = async (params: {
   messages: LangChainMessage[];
   assistantId: string;
   config?: Config;
+  metadata?: Metadata;
 }) => {
   const client = createClient();
   return client.runs.stream(params.threadId, params.assistantId, {
@@ -54,6 +55,7 @@ export const sendMessage = async (params: {
     },
     streamMode: 'messages',
     config: params.config,
+    metadata: params.metadata,
   });
 };
 
@@ -123,5 +125,5 @@ export const getThreadMetadata = async (threadId: string): Promise<Metadata> => 
 
 export const getStoreItem = async (key: string): Promise<Item | null> => {
   const client = createClient();
-  return client.store.getItem(['system_messages', getUserId()], key);
+  return client.store.getItem(['system', getUserId()], key);
 };
