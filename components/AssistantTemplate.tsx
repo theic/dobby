@@ -18,7 +18,6 @@ export function AssistantTemplate({
   assistantId: string;
   threadId: string;
   imageAttachments?: boolean;
-  welcomePrompts?: string[];
   previewMessage?: string;
 }) {
   const threadIdRef = useRef<string | undefined>(threadId);
