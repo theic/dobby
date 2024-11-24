@@ -47,3 +47,6 @@ next-env.d.ts
 
 # Husky
 .husky/_
+
+# firebase
+firebase-debug.log

@@ -1,7 +1,7 @@
 {
   "name": "messaging-quest",
   "description": "Dobby lets anyone create and share custom AI assistants with just natural language, giving instant feedback and easy web publishing—no magic spells needed.",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "private": true,
   "scripts": {
     "dev": "next dev --turbo",
